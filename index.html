@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BlackFrame</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Metal+Mania&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --red: #b30000; 
+            --green: #006400; 
+            --yellow: #ffcc00; 
+            --void: #020202; 
+            --smoke: rgba(10, 10, 10, 0.98); 
+        }
+        * { box-sizing: border-box; scrollbar-width: none; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { display: none; }
+
+        body { 
+            margin: 0; background: var(--void); color: #eee; 
+            font-family: 'Metal Mania', cursive; overflow-x: hidden;
+            background-image: radial-gradient(circle at center, #1a0000 0%, #000 100%);
+        }
+
+        :focus { outline: 3px solid var(--yellow) !important; outline-offset: 4px; }
+
+        #loader {
+            position: fixed; inset: 0; background: black; z-index: 10000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: 0.5s;
+        }
+        .voodoo-container {
+            width: 280px; height: 280px; 
+            border-radius: 50%; overflow: hidden;
+            border: 3px solid var(--red);
+            box-shadow: 0 0 40px var(--green);
+        }
+        .medusa-heart { 
+            width: 100%; height: 100%; 
+            object-fit: cover;
+            animation: ritualThump 0.9s infinite; 
+        }
+        @keyframes ritualThump { 
+            0%, 100% { transform: scale(1); filter: brightness(1); } 
+            15% { transform: scale(1.1); filter: brightness(1.3); } 
+            40% { transform: scale(1.05); } 
+        }
+
+        header { 
+            width: 100%; height: 60vh; 
+            background: linear-gradient(to bottom, transparent, var(--void)), url('IMG_8238.jpeg') no-repeat center top; 
+            background-size: cover; border-bottom: 3px solid var(--green); position: relative;
+        }
+        .logo { position: absolute; bottom: 30px; left: 5%; font-family: 'Nosifer'; font-size: clamp(3rem, 15vw, 7rem); color: var(--red); text-shadow: 3px 3px var(--yellow); }
+
+        .sticky-altar { position: sticky; top: 0; z-index: 1000; background: var(--green); backdrop-filter: blur(20px); padding: 15px; border-bottom: 2px solid var(--yellow); }
+        .search-input { width: 100%; background: #000; border: 1px solid var(--yellow); padding: 18px; color: var(--yellow); font-family: 'Creepster'; font-size: 1.6rem; outline: none; }
+
+        #side-menu {
+            position: fixed; top: 0; left: -320px; width: 300px; height: 100%;
+            background: #000; border-right: 3px solid var(--red); z-index: 2000;
+            transition: 0.4s cubic-bezier(0.1, 0.7, 0.1, 1); padding: 80px 25px;
+        }
+        #side-menu.open { left: 0; box-shadow: 20px 0 60px #000; }
+        .side-link { padding: 15px 0; color: #888; font-size: 1.8rem; cursor: pointer; border-bottom: 1px solid #111; transition: 0.3s; }
+        .side-link:hover, .side-link:focus { color: var(--yellow); padding-left: 10px; outline:none !important; border-left: 4px solid var(--green); }
+
+        .horror-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; padding: 15px; }
+        .card { aspect-ratio: 2/3; background: #080808; border: 1px solid #111; cursor: pointer; transition: 0.4s; overflow: hidden; }
+        .card:hover, .card:focus { transform: scale(1.08); border-color: var(--yellow); box-shadow: 0 0 30px rgba(0, 100, 0, 0.5); outline: none !important; }
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+
+        #ritual-screen {
+            position: fixed; inset: 0; background: var(--void); z-index: 5000; 
+            display: none; overflow-y: auto;
+        }
+        .hero-bg {
+            width: 100%; height: 55vh; background-size: cover; background-position: center;
+            position: relative; border-bottom: 5px solid var(--red);
+        }
+        .hero-overlay {
+            position: absolute; inset: 0; 
+            background: linear-gradient(to bottom, transparent, var(--void)), 
+                        linear-gradient(45deg, rgba(179,0,0,0.2), rgba(0,100,0,0.2)); 
+        }
+        .details-body {
+            max-width: 1100px; margin: -120px auto 0; padding: 30px; position: relative; z-index: 10;
+            background: rgba(2, 2, 2, 0.9); border-top: 2px solid var(--yellow); border-radius: 20px 20px 0 0;
+            box-shadow: 0 -20px 40px rgba(0,0,0,0.8);
+        }
+        .meta-row { display: flex; align-items: flex-end; gap: 25px; margin-bottom: 30px; flex-wrap: wrap; }
+        .main-poster { width: 200px; border: 3px solid var(--green); border-radius: 12px; box-shadow: 0 0 20px var(--red); }
+        
+        #det-title { 
+            font-family: 'Nosifer'; 
+            background: linear-gradient(to right, var(--yellow), var(--red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: clamp(1.8rem, 5vw, 3.5rem); 
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .play-btn {
+            background: linear-gradient(to right, var(--red), #600); color: white; border: 2px solid var(--yellow); width: 100%; 
+            padding: 22px; font-family: 'Creepster'; font-size: 2.2rem; 
+            border-radius: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .play-btn:focus { transform: scale(1.02); background: var(--yellow); color: var(--void); }
+
+        .player-mount { 
+            width: 100%; aspect-ratio: 16/9; background: #000; 
+            border: 3px solid var(--green); margin: 30px 0; display: none;
+            box-shadow: 0 0 30px rgba(0, 100, 0, 0.3);
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        .season-row { display: flex; overflow-x: auto; gap: 12px; margin: 20px 0; padding-bottom: 15px; }
+        .pill { 
+            padding: 15px 30px; background: #111; border: 2px solid #333; 
+            color: #aaa; border-radius: 10px; font-family: 'Creepster'; cursor: pointer; white-space: nowrap; font-size: 1.2rem;
+        }
+        .pill.active { border-color: var(--yellow); color: var(--yellow); background: #1a0000; box-shadow: 0 0 10px var(--red); }
+        .pill:focus { border-color: var(--green); color: white; background: var(--green); }
+    </style>
+</head>
+<body>
+
+<div id="loader">
+    <div class="voodoo-container">
+        <img src="IMG_8259.jpeg" class="medusa-heart">
+    </div>
+    <h2 style="font-family:'Nosifer'; color:var(--yellow); margin-top:30px; letter-spacing: 3px; text-shadow: 2px 2px var(--red);">FOR THE CULTURE</h2>
+</div>
+
+<div id="side-menu">
+    <h3 style="color:var(--yellow); font-family:'Nosifer';">THE VAULTS</h3>
+    <div class="side-link" tabindex="0" onclick="setMode('movies')">THE CULTURE</div>
+    <div class="side-link" tabindex="0" onclick="setMode('tv')">BINGE THE VIBE</div>
+    <div class="side-link" tabindex="0" onclick="setMode('comedy')">LAUGH OUT LOUD</div>
+    <div class="side-link" tabindex="0" onclick="setMode('classics')">LEGACY & CLASSICS</div>
+    <div class="side-link" tabindex="0" onclick="setMode('horror')">THE DARK SIDE</div>
+</div>
+
+<header><div class="logo">BlackFrame</div></header>
+
+<div class="sticky-altar">
+    <input type="text" id="search" class="search-input" placeholder="SEARCH THE CULTURE..." onkeyup="handleSearch(event)">
+</div>
+
+<main>
+    <section id="resume-ritual" style="display:none; padding:20px;">
+        <h2 style="color:var(--yellow); font-family:'Creepster'; font-size:2rem;">CONTINUE WATCHING</h2>
+        <div id="continue-grid" style="display:flex; overflow-x:auto; gap:10px;"></div>
+    </section>
+    <div class="horror-grid" id="main-grid"></div>
+    <div id="sentinel" style="height: 100px;"></div>
+</main>
+
+<div id="ritual-screen">
+    <div id="hero-bg" class="hero-bg"><div class="hero-overlay"></div></div>
+    <div class="details-body">
+        <button tabindex="0" id="back-ritual" onclick="closeRitual()" style="background:transparent; border:none; color:var(--yellow); font-size:2.5rem; cursor:pointer; margin-bottom:20px;">←</button>
+        <div class="meta-row">
+            <img id="det-poster" class="main-poster">
+            <div>
+                <h1 id="det-title"></h1>
+                <p id="det-meta" style="color:var(--green); font-size:1.4rem; font-weight: bold; margin-top: 10px;"></p>
+            </div>
+        </div>
+
+        <button id="play-btn" class="play-btn" tabindex="0" onclick="showPlayer()">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/play--v1.png" style="width:30px;">
+            PLAY NOW
+        </button>
+
+        <p id="det-desc" style="font-family:sans-serif; color:#ccc; line-height:1.8; font-size:1.2rem; margin-bottom:30px;"></p>
+
+        <div id="tv-controls" style="display:none;">
+            <h3 style="color:var(--yellow); font-family:'Creepster'; font-size:2rem; border-left: 5px solid var(--red); padding-left: 15px;">EPISODES</h3>
+            <div id="s-row" class="season-row"></div>
+            <div id="e-row" class="season-row"></div>
+        </div>
+
+        <div id="player-mount" class="player-mount"></div>
+    </div>
+</div>
+
+<script>
+    const API_KEY = 'b9c746781e1e9b084c4cc4f0420156d4';
+    const BLACK_CAST_KEYWORD = '255957|180547|210214|155477'; 
+
+    let page = 1, mode = 'movies', fetching = false, selected = null, currentS = 1;
+
+    document.addEventListener('keydown', e => {
+        const menu = document.getElementById('side-menu');
+        if (e.key === "ArrowLeft" && !menu.classList.contains('open')) {
+            menu.classList.add('open');
+            menu.querySelector('.side-link').focus();
+        }
+        if (e.key === "Backspace" || e.key === "Escape") {
+            if (document.getElementById('ritual-screen').style.display === 'block') {
+                closeRitual();
+            } else if (menu.classList.contains('open')) {
+                menu.classList.remove('open');
+            }
+        }
+    });
+
+    let touchStart = 0;
+    document.addEventListener('touchstart', e => touchStart = e.touches[0].clientX);
+    document.addEventListener('touchend', e => {
+        let diff = e.changedTouches[0].clientX - touchStart;
+        if(diff > 120) document.getElementById('side-menu').classList.add('open');
+        if(diff < -120) document.getElementById('side-menu').classList.remove('open');
+    });
+
+    const obs = new IntersectionObserver(e => { if(e[0].isIntersecting && !fetching) { page++; load(); } });
+    obs.observe(document.getElementById('sentinel'));
+
+    async function load(reset = false) {
+        if(reset) { page = 1; document.getElementById('main-grid').innerHTML = ''; }
+        fetching = true;
+        
+        let baseUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&page=${page}&with_original_language=en&with_keywords=${BLACK_CAST_KEYWORD}&sort_by=popularity.desc`;
+        
+        if(mode === 'tv') baseUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&page=${page}&with_original_language=en&with_keywords=${BLACK_CAST_KEYWORD}`;
+        if(mode === 'horror') baseUrl += `&with_genres=27`;
+        if(mode === 'comedy') baseUrl += `&with_genres=35`;
+        if(mode === 'classics') baseUrl += `&release_date.lte=2005-01-01`;
+
+        const res = await fetch(baseUrl);
+        const data = await res.json();
+        render(data.results);
+        fetching = false;
+    }
+
+    function render(items) {
+        const grid = document.getElementById('main-grid');
+        items.forEach(item => {
+            if(!item.poster_path) return;
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.tabIndex = "0"; 
+            card.innerHTML = `<img src="https://image.tmdb.org/t/p/w342${item.poster_path}">`;
+            card.onclick = () => openDetails(item);
+            card.onkeydown = (e) => { if(e.key === 'Enter') openDetails(item); };
+            grid.appendChild(card);
+        });
+    }
+
+    async function openDetails(item) {
+        selected = item;
+        document.getElementById('ritual-screen').style.display = 'block';
+        document.getElementById('det-title').innerText = item.title || item.name;
+        document.getElementById('det-desc').innerText = item.overview;
+        document.getElementById('det-poster').src = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
+        document.getElementById('hero-bg').style.backgroundImage = `url(https://image.tmdb.org/t/p/original${item.backdrop_path})`;
+        document.getElementById('det-meta').innerText = `${item.release_date || item.first_air_date} | ⭐ ${item.vote_average}`;
+        
+        const isTV = !!item.first_air_date;
+        if(isTV) {
+            document.getElementById('tv-controls').style.display = 'block';
+            const res = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${API_KEY}`);
+            const data = await res.json();
+            document.getElementById('s-row').innerHTML = data.seasons.map(s => `<div class="pill" tabindex="0" onclick="syncEpisodes(${s.season_number}, this)">S${s.season_number}</div>`).join('');
+            syncEpisodes(1);
+        } else {
+            document.getElementById('tv-controls').style.display = 'none';
+        }
+        saveHistory(item);
+        document.getElementById('play-btn').focus();
+    }
+
+    async function syncEpisodes(sNum, el) {
+        currentS = sNum;
+        if(el) { document.querySelectorAll('#s-row .pill').forEach(p => p.classList.remove('active')); el.classList.add('active'); }
+        const res = await fetch(`https://api.themoviedb.org/3/tv/${selected.id}/season/${sNum}?api_key=${API_KEY}`);
+        const data = await res.json();
+        document.getElementById('e-row').innerHTML = data.episodes.map(e => `<div class="pill" tabindex="0" onclick="ignitePlayer(${e.episode_number}, this)">E${e.episode_number}</div>`).join('');
+    }
+
+    function showPlayer() {
+        document.getElementById('player-mount').style.display = 'block';
+        ignitePlayer(1);
+        document.getElementById('play-btn').style.display = 'none';
+    }
+
+    function ignitePlayer(eNum, el) {
+        if(el) { document.querySelectorAll('#e-row .pill').forEach(p => p.classList.remove('active')); el.classList.add('active'); }
+        const mount = document.getElementById('player-mount');
+        mount.style.display = 'block';
+        const isTV = !!selected.first_air_date;
+        let url = isTV ? `https://vidsrc.cc/v2/embed/tv/${selected.id}/${currentS}/${eNum || 1}` 
+                       : `https://vidsrc.cc/v2/embed/movie/${selected.id}`;
+        mount.innerHTML = `<iframe src="${url}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"></iframe>`;
+    }
+
+    function handleSearch(e) {
+        if(e.key === 'Enter') {
+            document.getElementById('main-grid').innerHTML = '';
+            fetch(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&query=${e.target.value}`)
+                .then(r => r.json()).then(d => render(d.results));
+        }
+    }
+
+    function setMode(m) { mode = m; document.getElementById('side-menu').classList.remove('open'); load(true); }
+    function closeRitual() { 
+        document.getElementById('ritual-screen').style.display = 'none'; 
+        document.getElementById('player-mount').innerHTML = ''; 
+        document.getElementById('play-btn').style.display = 'flex';
+    }
+    
+    function saveHistory(i) {
+        let h = JSON.parse(localStorage.getItem('fear_history') || '[]');
+        h = h.filter(x => x.id !== i.id); h.unshift(i);
+        localStorage.setItem('fear_history', JSON.stringify(h.slice(0,10))); renderHistory();
+    }
+    function renderHistory() {
+        const h = JSON.parse(localStorage.getItem('fear_history') || '[]');
+        if(h.length === 0) return;
+        document.getElementById('resume-ritual').style.display = 'block';
+        document.getElementById('continue-grid').innerHTML = h.map(i => `<div class="card" tabindex="0" style="min-width:100px; height:160px;" onclick='openDetails(${JSON.stringify(i)})'><img src="https://image.tmdb.org/t/p/w185${i.poster_path}"></div>`).join('');
+    }
+
+    window.onload = () => {
+        load(); renderHistory();
+        setTimeout(() => {
+            const l = document.getElementById('loader');
+            if(l) { l.style.opacity = '0'; setTimeout(() => l.style.display = 'none', 500); }
+        }, 1500);
+    };
+</script>
+</body>
+</html>
