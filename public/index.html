@@ -7,11 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --gold: #D4AF37; 
-            --crimson: #8B0000; 
-            --emerald: #004d26; 
-            --onyx: #050505; 
-            --ivory: #f4f4f4; 
+            --gold: #D4AF37; --crimson: #8B0000; --emerald: #004d26; 
+            --onyx: #050505; --ivory: #f4f4f4; 
         }
         * { box-sizing: border-box; scrollbar-width: none; -webkit-tap-highlight-color: transparent; }
         ::-webkit-scrollbar { display: none; }
@@ -30,14 +27,11 @@
             transition: 0.5s;
         }
         .voodoo-container {
-            width: 200px; height: 200px; 
-            border-radius: 50%; overflow: hidden;
-            border: 4px solid var(--gold);
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+            width: 200px; height: 200px; border-radius: 50%; overflow: hidden;
+            border: 4px solid var(--gold); box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
         }
         .medusa-heart { 
-            width: 100%; height: 100%; 
-            object-fit: cover;
+            width: 100%; height: 100%; object-fit: cover;
             animation: powerPulse 2s infinite ease-in-out; 
         }
         @keyframes powerPulse { 
@@ -53,8 +47,7 @@
         .logo { 
             position: absolute; bottom: 40px; left: 5%; 
             font-family: 'Staatliches'; font-size: clamp(4rem, 18vw, 10rem); 
-            color: var(--ivory); letter-spacing: 2px;
-            text-shadow: 4px 4px var(--crimson); 
+            color: var(--ivory); letter-spacing: 2px; text-shadow: 4px 4px var(--crimson); 
         }
 
         .sticky-altar { 
@@ -79,7 +72,7 @@
             cursor: pointer; border-bottom: 1px solid #222; transition: 0.3s; 
             text-transform: uppercase; letter-spacing: 1px;
         }
-        .side-link:hover, .side-link:focus { color: var(--gold); padding-left: 10px; outline:none !important; border-left: 5px solid var(--crimson); }
+        .side-link:hover, .side-link:focus { color: var(--gold); padding-left: 10px; border-left: 5px solid var(--crimson); }
 
         .horror-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 25px; }
         .card { 
@@ -87,89 +80,56 @@
             cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             overflow: hidden; border: 1px solid #222;
         }
-        .card:hover, .card:focus { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 15px 35px rgba(0,0,0,0.8); outline: none !important; }
+        .card:hover, .card:focus { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
         .card img { width: 100%; height: 100%; object-fit: cover; }
 
-        #ritual-screen {
-            position: fixed; inset: 0; background: var(--onyx); z-index: 5000; 
-            display: none; overflow-y: auto;
-        }
-        .hero-bg {
-            width: 100%; height: 60vh; background-size: cover; background-position: center;
-            position: relative; border-bottom: 6px solid var(--crimson);
-        }
-        .hero-overlay {
-            position: absolute; inset: 0; 
-            background: linear-gradient(to bottom, transparent, var(--onyx)), 
-                        linear-gradient(45deg, rgba(139,0,0,0.1), rgba(0,77,38,0.1)); 
-        }
+        #ritual-screen { position: fixed; inset: 0; background: var(--onyx); z-index: 5000; display: none; overflow-y: auto; }
+        .hero-bg { width: 100%; height: 60vh; background-size: cover; background-position: center; position: relative; border-bottom: 6px solid var(--crimson); }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, var(--onyx)); }
         .details-body {
             max-width: 1100px; margin: -100px auto 0; padding: 40px; position: relative; z-index: 10;
             background: rgba(10, 10, 10, 0.95); border-top: 3px solid var(--gold); border-radius: 24px 24px 0 0;
-            box-shadow: 0 -25px 50px rgba(0,0,0,0.9);
         }
         .meta-row { display: flex; align-items: flex-end; gap: 30px; margin-bottom: 35px; flex-wrap: wrap; }
-        .main-poster { width: 220px; border: 4px solid var(--gold); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        #det-title { 
-            font-family: 'Staatliches'; 
-            color: var(--ivory);
-            font-size: clamp(2.5rem, 6vw, 4.5rem); 
-            margin: 0; line-height: 1;
-        }
-
+        .main-poster { width: 220px; border: 4px solid var(--gold); border-radius: 16px; }
+        #det-title { font-family: 'Staatliches'; color: var(--ivory); font-size: clamp(2.5rem, 6vw, 4.5rem); margin: 0; }
         .play-btn {
-            background: var(--gold); color: black; border: none; width: 100%; 
-            padding: 20px; font-weight: 900; font-size: 1.5rem; text-transform: uppercase;
-            border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 15px;
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2); transition: 0.3s;
+            background: var(--gold); color: black; border: none; width: 100%; padding: 20px; font-weight: 900; font-size: 1.5rem;
+            text-transform: uppercase; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 15px;
         }
-        .play-btn:focus { transform: scale(1.02); background: var(--ivory); }
-
-        .player-mount { 
-            width: 100%; aspect-ratio: 16/9; background: #000; 
-            border: 4px solid var(--emerald); margin: 30px 0; display: none;
-            border-radius: 12px; overflow: hidden;
-        }
+        .player-mount { width: 100%; aspect-ratio: 16/9; background: #000; border: 4px solid var(--emerald); margin: 30px 0; display: none; border-radius: 12px; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; }
-
         .season-row { display: flex; overflow-x: auto; gap: 15px; margin: 25px 0; padding-bottom: 15px; }
-        .pill { 
-            padding: 12px 25px; background: #1a1a1a; border: 2px solid #333; 
-            color: #eee; border-radius: 8px; font-weight: 700; cursor: pointer; white-space: nowrap;
-        }
-        .pill.active { border-color: var(--gold); color: var(--gold); background: rgba(212, 175, 55, 0.1); }
-        .pill:focus { border-color: var(--emerald); color: white; background: var(--emerald); }
+        .pill { padding: 12px 25px; background: #1a1a1a; border: 2px solid #333; color: #eee; border-radius: 8px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .pill.active { border-color: var(--gold); color: var(--gold); }
     </style>
 </head>
 <body>
 
 <div id="loader">
-    <div class="voodoo-container">
-        <img src="IMG_8259.jpeg" class="medusa-heart">
-    </div>
+    <div class="voodoo-container"><img src="IMG_8259.jpeg" class="medusa-heart"></div>
     <h2 style="font-family:'Staatliches'; color:var(--gold); margin-top:30px; letter-spacing: 5px; font-size: 2.5rem;">FOR THE CULTURE</h2>
 </div>
 
 <div id="side-menu">
     <h3 style="color:var(--gold); font-family:'Staatliches'; font-size: 2rem; margin-bottom: 30px;">THE ARCHIVES</h3>
-    <div class="side-link" tabindex="0" onclick="setMode('movies')">BLACK CINEMA</div>
-    <div class="side-link" tabindex="0" onclick="setMode('tv')">CULTURED SERIES</div>
-    <div class="side-link" tabindex="0" onclick="setMode('plays')">STAGE & PLAYS</div>
-    <div class="side-link" tabindex="0" onclick="setMode('comedy')">COMEDY GOLD</div>
-    <div class="side-link" tabindex="0" onclick="setMode('classics')">LEGACY & CLASSICS</div>
-    <div class="side-link" tabindex="0" onclick="setMode('horror')">THRILLERS</div>
+    <div class="side-link" onclick="setMode('movies')">BLACK CINEMA</div>
+    <div class="side-link" onclick="setMode('tv')">CULTURED SERIES</div>
+    <div class="side-link" onclick="setMode('plays')">STAGE & PLAYS</div>
+    <div class="side-link" onclick="setMode('comedy')">COMEDY GOLD</div>
+    <div class="side-link" onclick="setMode('classics')">LEGACY & CLASSICS</div>
+    <div class="side-link" onclick="setMode('horror')">THRILLERS</div>
 </div>
 
 <header><div class="logo">BlackFrame</div></header>
 
 <div class="sticky-altar">
-    <input type="text" id="search" class="search-input" placeholder="SEARCH THE ARCHIVE..." onkeyup="handleSearch(event)">
+    <input type="text" id="search" class="search-input" placeholder="SEARCH THE CULTURE..." onkeyup="handleSearch(event)">
 </div>
 
 <main>
     <section id="resume-ritual" style="display:none; padding:30px;">
-        <h2 style="color:var(--gold); font-family:'Staatliches'; font-size:2.2rem; letter-spacing: 1px;">CONTINUE WATCHING</h2>
+        <h2 style="color:var(--gold); font-family:'Staatliches'; font-size:2.2rem;">CONTINUE WATCHING</h2>
         <div id="continue-grid" style="display:flex; overflow-x:auto; gap:15px;"></div>
     </section>
     <div class="horror-grid" id="main-grid"></div>
@@ -179,28 +139,18 @@
 <div id="ritual-screen">
     <div id="hero-bg" class="hero-bg"><div class="hero-overlay"></div></div>
     <div class="details-body">
-        <button tabindex="0" id="back-ritual" onclick="closeRitual()" style="background:transparent; border:none; color:var(--gold); font-size:3rem; cursor:pointer; margin-bottom:20px;">←</button>
+        <button id="back-ritual" onclick="closeRitual()" style="background:transparent; border:none; color:var(--gold); font-size:3rem; cursor:pointer;">←</button>
         <div class="meta-row">
             <img id="det-poster" class="main-poster">
-            <div>
-                <h1 id="det-title"></h1>
-                <p id="det-meta" style="color:var(--gold); font-size:1.2rem; font-weight: 900; margin-top: 15px; letter-spacing: 1px;"></p>
-            </div>
+            <div><h1 id="det-title"></h1><p id="det-meta" style="color:var(--gold); font-size:1.2rem; font-weight: 900;"></p></div>
         </div>
-
-        <button id="play-btn" class="play-btn" tabindex="0" onclick="showPlayer()">
-            <img src="https://img.icons8.com/ios-filled/50/000000/play--v1.png" style="width:24px;">
-            WATCH NOW
-        </button>
-
-        <p id="det-desc" style="font-family:'Inter', sans-serif; color:#ddd; line-height:1.8; font-size:1.1rem; margin: 30px 0;"></p>
-
+        <button id="play-btn" class="play-btn" onclick="showPlayer()">WATCH NOW</button>
+        <p id="det-desc" style="color:#ddd; line-height:1.8; font-size:1.1rem;"></p>
         <div id="tv-controls" style="display:none;">
             <h3 style="color:var(--gold); font-family:'Staatliches'; font-size:2rem; border-left: 6px solid var(--crimson); padding-left: 20px;">EPISODES</h3>
             <div id="s-row" class="season-row"></div>
             <div id="e-row" class="season-row"></div>
         </div>
-
         <div id="player-mount" class="player-mount"></div>
     </div>
 </div>
@@ -208,177 +158,93 @@
 <script>
     const API_KEY = 'b9c746781e1e9b084c4cc4f0420156d4';
     
-    // Hardcoded IDs for your requested Black Archive
+    // STRICT INCLUSION LIST - Only these IDs will ever be loaded
     const ARCHIVES = {
         movies: [
-            11456, 12154, 840, 18725, 43867, 10034, 1361, 11545, 11468, 10471, 11419, 13596, 10603, 11827, 450465, 419704, 505642, 10535, 11370, 872, 11846, 11398, 9381, 1904, 11844, 11003, 9102, 11461, 4421, 13730, 2900, 11186, 10756, 12621, 12610, 11453, 9335, 10839, 11833, 110416, 1391, 11858, 8072, 11462, 11469, 18330, 11311, 4310, 11822, 11452, 11062, 11470, 9370, 11415, 10501, 10540, 12144, 9556, 10776, 12158, 607, 11818, 11373, 12700, 11418, 11451, 11416, 5174, 9954, 137, 12620, 10156, 14113, 11471, 9353, 11631, 11417, 8665, 11371, 41211, 10395, 10393, 10391, 10557, 11041, 12155, 11467, 10594, 9352, 9422, 11420
+            11456, 12154, 840, 18725, 43867, 10034, 1361, 11545, 11468, 10471, 11419, 13596, 10603, 11827, 450465, 10535, 11370, 872, 11846, 11398, 9381, 1904, 11844, 11003, 9102, 11461, 4421, 13730, 2900, 11186, 10756, 12621, 12610, 11453, 9335, 10839, 11833, 110416, 1391, 11858, 8072, 11462, 11469, 18330, 11311, 4310, 11822, 11452, 11062, 11470, 9370, 11415, 10501, 10540, 12144, 9556, 10776, 12158, 607, 11818, 11373, 12700, 11418, 11451, 11416, 5174, 9954, 137, 12620, 10156, 14113, 11471, 9353, 11631, 11417, 8665, 11371, 41211, 10395, 10393, 10391, 10557, 11041, 12155, 11467, 10594, 9352, 9422, 11420
         ],
         tv: [
             1681, 4589, 2125, 3335, 61608, 65545, 1359, 2300, 4370, 2187, 2405, 3073, 2313, 1157, 4390, 12818, 18564, 4611, 6720, 2038, 2693, 2261, 111322, 12399, 1167, 3006, 1089, 4426, 61164, 5800, 11122, 11575, 14065, 14216, 14389, 2984, 4607, 72549, 2351, 4410, 1667, 2946, 10842, 600
         ],
-        plays: [
-            // Original Dreamgirls, Tyler Perry Plays, Vivica A Fox Plays
-            41211, 35048, 5174, 43419, 43420, 31362, 26524, 26523, 22448, 11471, 10594
-        ],
-        comedy: [
-            11003, 11461, 11451, 11416, 10756, 10594, 11467, 13730, 12144, 10393, 10391, 10395, 10557, 14113, 11417, 12620, 12700
-        ],
-        classics: [
-            11062, 11041, 11833, 1361, 10034, 10603, 9102, 11846, 10471, 11419, 13596, 11827, 4421, 10839, 110416, 2900, 9335, 10540, 11415, 11370
-        ],
-        horror: [
-            11370, 419704, 505642, 18330, 11311, 10501, 11858, 607, 72549
-        ]
+        plays: [41211, 35048, 5174, 43419, 43420, 31362, 26524, 26523, 22448, 11471, 10594, 12700],
+        comedy: [11003, 11461, 11451, 11416, 10756, 10594, 11467, 13730, 12144, 10393, 10391, 10395, 10557, 14113, 11417, 12620, 12700],
+        classics: [11062, 11041, 11833, 1361, 10034, 10603, 9102, 11846, 10471, 11419, 13596, 11827, 4421, 10839, 110416, 2900, 9335, 10540, 11415, 11370],
+        horror: [11370, 419704, 505642, 18330, 11311, 10501, 11858, 607, 72549]
     };
 
     let page = 1, mode = 'movies', fetching = false, selected = null, currentS = 1;
 
-    document.addEventListener('keydown', e => {
-        const menu = document.getElementById('side-menu');
-        if (e.key === "ArrowLeft" && !menu.classList.contains('open')) {
-            menu.classList.add('open');
-            menu.querySelector('.side-link').focus();
-        }
-        if (e.key === "Backspace" || e.key === "Escape") {
-            if (document.getElementById('ritual-screen').style.display === 'block') {
-                closeRitual();
-            } else if (menu.classList.contains('open')) {
-                menu.classList.remove('open');
-            }
-        }
-    });
-
-    let touchStart = 0;
-    document.addEventListener('touchstart', e => touchStart = e.touches[0].clientX);
-    document.addEventListener('touchend', e => {
-        let diff = e.changedTouches[0].clientX - touchStart;
-        if(diff > 120) document.getElementById('side-menu').classList.add('open');
-        if(diff < -120) document.getElementById('side-menu').classList.remove('open');
-    });
-
     async function load(reset = false) {
         if(reset) { page = 1; document.getElementById('main-grid').innerHTML = ''; }
         fetching = true;
-        
         const currentList = ARCHIVES[mode];
         const perPage = 20;
         const start = (page - 1) * perPage;
-        const end = start + perPage;
-        const pageIds = currentList.slice(start, end);
-
+        const pageIds = currentList.slice(start, start + perPage);
         if (pageIds.length === 0) { fetching = false; return; }
-
         const type = (mode === 'tv') ? 'tv' : 'movie';
-        
-        const promises = pageIds.map(id => 
-            fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}`).then(r => r.json())
-        );
-
-        const results = await Promise.all(promises);
+        const results = await Promise.all(pageIds.map(id => fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}`).then(r => r.json())));
         render(results.filter(r => r.id));
         fetching = false;
     }
 
-    const obs = new IntersectionObserver(e => { if(e[0].isIntersecting && !fetching) { 
-        if((page * 20) < ARCHIVES[mode].length) { page++; load(); }
-    }});
+    const obs = new IntersectionObserver(e => { if(e[0].isIntersecting && !fetching && (page * 20) < ARCHIVES[mode].length) { page++; load(); }});
     obs.observe(document.getElementById('sentinel'));
 
     function render(items) {
         const grid = document.getElementById('main-grid');
         items.forEach(item => {
-            if(!item.poster_path) return;
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.tabIndex = "0"; 
+            const card = document.createElement('div'); card.className = 'card';
             card.innerHTML = `<img src="https://image.tmdb.org/t/p/w342${item.poster_path}">`;
             card.onclick = () => openDetails(item);
-            card.onkeydown = (e) => { if(e.key === 'Enter') openDetails(item); };
             grid.appendChild(card);
         });
     }
 
     async function openDetails(item) {
-        selected = item;
-        document.getElementById('ritual-screen').style.display = 'block';
+        selected = item; document.getElementById('ritual-screen').style.display = 'block';
         document.getElementById('det-title').innerText = item.title || item.name;
         document.getElementById('det-desc').innerText = item.overview;
         document.getElementById('det-poster').src = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
         document.getElementById('hero-bg').style.backgroundImage = `url(https://image.tmdb.org/t/p/original${item.backdrop_path})`;
-        document.getElementById('det-meta').innerText = `${(item.release_date || item.first_air_date || '').split('-')[0]} | ⭐ ${item.vote_average}`;
-        
         const isTV = !!item.first_air_date;
         if(isTV) {
             document.getElementById('tv-controls').style.display = 'block';
             const res = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${API_KEY}`);
             const data = await res.json();
-            document.getElementById('s-row').innerHTML = (data.seasons || []).map(s => `<div class="pill" tabindex="0" onclick="syncEpisodes(${s.season_number}, this)">SEASON ${s.season_number}</div>`).join('');
+            document.getElementById('s-row').innerHTML = data.seasons.map(s => `<div class="pill" onclick="syncEpisodes(${s.season_number}, this)">SEASON ${s.season_number}</div>`).join('');
             syncEpisodes(1);
-        } else {
-            document.getElementById('tv-controls').style.display = 'none';
-        }
-        saveHistory(item);
-        document.getElementById('play-btn').focus();
+        } else { document.getElementById('tv-controls').style.display = 'none'; }
     }
 
     async function syncEpisodes(sNum, el) {
-        currentS = sNum;
-        if(el) { document.querySelectorAll('#s-row .pill').forEach(p => p.classList.remove('active')); el.classList.add('active'); }
+        currentS = sNum; if(el) { document.querySelectorAll('#s-row .pill').forEach(p => p.classList.remove('active')); el.classList.add('active'); }
         const res = await fetch(`https://api.themoviedb.org/3/tv/${selected.id}/season/${sNum}?api_key=${API_KEY}`);
         const data = await res.json();
-        document.getElementById('e-row').innerHTML = (data.episodes || []).map(e => `<div class="pill" tabindex="0" onclick="ignitePlayer(${e.episode_number}, this)">EP ${e.episode_number}</div>`).join('');
+        document.getElementById('e-row').innerHTML = data.episodes.map(e => `<div class="pill" onclick="ignitePlayer(${e.episode_number}, this)">EP ${e.episode_number}</div>`).join('');
     }
 
     function showPlayer() {
         document.getElementById('player-mount').style.display = 'block';
-        ignitePlayer(1);
-        document.getElementById('play-btn').style.display = 'none';
-    }
-
-    function ignitePlayer(eNum, el) {
-        if(el) { document.querySelectorAll('#e-row .pill').forEach(p => p.classList.remove('active')); el.classList.add('active'); }
-        const mount = document.getElementById('player-mount');
-        mount.style.display = 'block';
         const isTV = !!selected.first_air_date;
-        let url = isTV ? `https://vidsrc.cc/v2/embed/tv/${selected.id}/${currentS}/${eNum || 1}` 
-                       : `https://vidsrc.cc/v2/embed/movie/${selected.id}`;
-        mount.innerHTML = `<iframe src="${url}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"></iframe>`;
-    }
-
-    function handleSearch(e) {
-        if(e.key === 'Enter') {
-            document.getElementById('main-grid').innerHTML = '';
-            fetch(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&query=${e.target.value}`)
-                .then(r => r.json()).then(d => render(d.results));
-        }
+        let url = isTV ? `https://vidsrc.cc/v2/embed/tv/${selected.id}/${currentS}/1` : `https://vidsrc.cc/v2/embed/movie/${selected.id}`;
+        document.getElementById('player-mount').innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
     }
 
     function setMode(m) { mode = m; document.getElementById('side-menu').classList.remove('open'); load(true); }
-    function closeRitual() { 
-        document.getElementById('ritual-screen').style.display = 'none'; 
-        document.getElementById('player-mount').innerHTML = ''; 
-        document.getElementById('play-btn').style.display = 'flex';
-    }
+    function closeRitual() { document.getElementById('ritual-screen').style.display = 'none'; document.getElementById('player-mount').innerHTML = ''; }
     
-    function saveHistory(i) {
-        let h = JSON.parse(localStorage.getItem('fear_history') || '[]');
-        h = h.filter(x => x.id !== i.id); h.unshift(i);
-        localStorage.setItem('fear_history', JSON.stringify(h.slice(0,10))); renderHistory();
-    }
-    function renderHistory() {
-        const h = JSON.parse(localStorage.getItem('fear_history') || '[]');
-        if(h.length === 0) return;
-        document.getElementById('resume-ritual').style.display = 'block';
-        document.getElementById('continue-grid').innerHTML = h.map(i => `<div class="card" tabindex="0" style="min-width:120px; height:180px;" onclick='openDetails(${JSON.stringify(i).replace(/'/g, "&apos;")})'><img src="https://image.tmdb.org/t/p/w185${i.poster_path}"></div>`).join('');
-    }
-
     window.onload = () => {
-        load(); renderHistory();
-        setTimeout(() => {
-            const l = document.getElementById('loader');
-            if(l) { l.style.opacity = '0'; setTimeout(() => l.style.display = 'none', 500); }
-        }, 1500);
+        load();
+        setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(() => document.getElementById('loader').style.display = 'none', 500); }, 1500);
     };
+
+    document.addEventListener('touchstart', e => touchStart = e.touches[0].clientX);
+    document.addEventListener('touchend', e => { 
+        let diff = e.changedTouches[0].clientX - touchStart;
+        if(diff > 120) document.getElementById('side-menu').classList.add('open');
+        if(diff < -120) document.getElementById('side-menu').classList.remove('open');
+    });
 </script>
 </body>
 </html>
