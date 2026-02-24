@@ -75,11 +75,11 @@
         }
         #side-menu.open { left: 0; box-shadow: 20px 0 60px #000; }
         .side-link { 
-            padding: 18px 0; color: #bbb; font-size: 1.4rem; font-weight: 700;
+            padding: 18px 0; color: #bbb; font-size: 1.2rem; font-weight: 700;
             cursor: pointer; border-bottom: 1px solid #222; transition: 0.3s; 
             text-transform: uppercase; letter-spacing: 1px;
         }
-        .side-link:hover, .side-link:focus { color: var(--gold); padding-left: 15px; outline:none !important; border-left: 5px solid var(--crimson); }
+        .side-link:hover, .side-link:focus { color: var(--gold); padding-left: 10px; outline:none !important; border-left: 5px solid var(--crimson); }
 
         .horror-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 25px; }
         .card { 
@@ -152,11 +152,12 @@
 </div>
 
 <div id="side-menu">
-    <h3 style="color:var(--gold); font-family:'Staatliches'; font-size: 2rem; margin-bottom: 30px;">COLLECTIONS</h3>
+    <h3 style="color:var(--gold); font-family:'Staatliches'; font-size: 2rem; margin-bottom: 30px;">THE ARCHIVES</h3>
     <div class="side-link" tabindex="0" onclick="setMode('movies')">BLACK CINEMA</div>
-    <div class="side-link" tabindex="0" onclick="setMode('tv')">PREMIUM SERIES</div>
+    <div class="side-link" tabindex="0" onclick="setMode('tv')">CULTURED SERIES</div>
+    <div class="side-link" tabindex="0" onclick="setMode('plays')">STAGE & PLAYS</div>
     <div class="side-link" tabindex="0" onclick="setMode('comedy')">COMEDY GOLD</div>
-    <div class="side-link" tabindex="0" onclick="setMode('classics')">THE LEGACY</div>
+    <div class="side-link" tabindex="0" onclick="setMode('classics')">LEGACY & CLASSICS</div>
     <div class="side-link" tabindex="0" onclick="setMode('horror')">THRILLERS</div>
 </div>
 
@@ -205,9 +206,30 @@
 </div>
 
 <script>
-    // Logic remains identical as requested
     const API_KEY = 'b9c746781e1e9b084c4cc4f0420156d4';
-    const BLACK_CAST_KEYWORD = '255957|180547|210214|155477'; 
+    
+    // Hardcoded IDs for your requested Black Archive
+    const ARCHIVES = {
+        movies: [
+            11456, 12154, 840, 18725, 43867, 10034, 1361, 11545, 11468, 10471, 11419, 13596, 10603, 11827, 450465, 419704, 505642, 10535, 11370, 872, 11846, 11398, 9381, 1904, 11844, 11003, 9102, 11461, 4421, 13730, 2900, 11186, 10756, 12621, 12610, 11453, 9335, 10839, 11833, 110416, 1391, 11858, 8072, 11462, 11469, 18330, 11311, 4310, 11822, 11452, 11062, 11470, 9370, 11415, 10501, 10540, 12144, 9556, 10776, 12158, 607, 11818, 11373, 12700, 11418, 11451, 11416, 5174, 9954, 137, 12620, 10156, 14113, 11471, 9353, 11631, 11417, 8665, 11371, 41211, 10395, 10393, 10391, 10557, 11041, 12155, 11467, 10594, 9352, 9422, 11420
+        ],
+        tv: [
+            1681, 4589, 2125, 3335, 61608, 65545, 1359, 2300, 4370, 2187, 2405, 3073, 2313, 1157, 4390, 12818, 18564, 4611, 6720, 2038, 2693, 2261, 111322, 12399, 1167, 3006, 1089, 4426, 61164, 5800, 11122, 11575, 14065, 14216, 14389, 2984, 4607, 72549, 2351, 4410, 1667, 2946, 10842, 600
+        ],
+        plays: [
+            // Original Dreamgirls, Tyler Perry Plays, Vivica A Fox Plays
+            41211, 35048, 5174, 43419, 43420, 31362, 26524, 26523, 22448, 11471, 10594
+        ],
+        comedy: [
+            11003, 11461, 11451, 11416, 10756, 10594, 11467, 13730, 12144, 10393, 10391, 10395, 10557, 14113, 11417, 12620, 12700
+        ],
+        classics: [
+            11062, 11041, 11833, 1361, 10034, 10603, 9102, 11846, 10471, 11419, 13596, 11827, 4421, 10839, 110416, 2900, 9335, 10540, 11415, 11370
+        ],
+        horror: [
+            11370, 419704, 505642, 18330, 11311, 10501, 11858, 607, 72549
+        ]
+    };
 
     let page = 1, mode = 'movies', fetching = false, selected = null, currentS = 1;
 
@@ -234,25 +256,33 @@
         if(diff < -120) document.getElementById('side-menu').classList.remove('open');
     });
 
-    const obs = new IntersectionObserver(e => { if(e[0].isIntersecting && !fetching) { page++; load(); } });
-    obs.observe(document.getElementById('sentinel'));
-
     async function load(reset = false) {
         if(reset) { page = 1; document.getElementById('main-grid').innerHTML = ''; }
         fetching = true;
         
-        let baseUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&page=${page}&with_original_language=en&with_keywords=${BLACK_CAST_KEYWORD}&sort_by=popularity.desc`;
-        
-        if(mode === 'tv') baseUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&page=${page}&with_original_language=en&with_keywords=${BLACK_CAST_KEYWORD}`;
-        if(mode === 'horror') baseUrl += `&with_genres=27`;
-        if(mode === 'comedy') baseUrl += `&with_genres=35`;
-        if(mode === 'classics') baseUrl += `&release_date.lte=2005-01-01`;
+        const currentList = ARCHIVES[mode];
+        const perPage = 20;
+        const start = (page - 1) * perPage;
+        const end = start + perPage;
+        const pageIds = currentList.slice(start, end);
 
-        const res = await fetch(baseUrl);
-        const data = await res.json();
-        render(data.results);
+        if (pageIds.length === 0) { fetching = false; return; }
+
+        const type = (mode === 'tv') ? 'tv' : 'movie';
+        
+        const promises = pageIds.map(id => 
+            fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}`).then(r => r.json())
+        );
+
+        const results = await Promise.all(promises);
+        render(results.filter(r => r.id));
         fetching = false;
     }
+
+    const obs = new IntersectionObserver(e => { if(e[0].isIntersecting && !fetching) { 
+        if((page * 20) < ARCHIVES[mode].length) { page++; load(); }
+    }});
+    obs.observe(document.getElementById('sentinel'));
 
     function render(items) {
         const grid = document.getElementById('main-grid');
@@ -275,14 +305,14 @@
         document.getElementById('det-desc').innerText = item.overview;
         document.getElementById('det-poster').src = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
         document.getElementById('hero-bg').style.backgroundImage = `url(https://image.tmdb.org/t/p/original${item.backdrop_path})`;
-        document.getElementById('det-meta').innerText = `${(item.release_date || item.first_air_date).split('-')[0]} | ⭐ ${item.vote_average}`;
+        document.getElementById('det-meta').innerText = `${(item.release_date || item.first_air_date || '').split('-')[0]} | ⭐ ${item.vote_average}`;
         
         const isTV = !!item.first_air_date;
         if(isTV) {
             document.getElementById('tv-controls').style.display = 'block';
             const res = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${API_KEY}`);
             const data = await res.json();
-            document.getElementById('s-row').innerHTML = data.seasons.map(s => `<div class="pill" tabindex="0" onclick="syncEpisodes(${s.season_number}, this)">SEASON ${s.season_number}</div>`).join('');
+            document.getElementById('s-row').innerHTML = (data.seasons || []).map(s => `<div class="pill" tabindex="0" onclick="syncEpisodes(${s.season_number}, this)">SEASON ${s.season_number}</div>`).join('');
             syncEpisodes(1);
         } else {
             document.getElementById('tv-controls').style.display = 'none';
@@ -296,7 +326,7 @@
         if(el) { document.querySelectorAll('#s-row .pill').forEach(p => p.classList.remove('active')); el.classList.add('active'); }
         const res = await fetch(`https://api.themoviedb.org/3/tv/${selected.id}/season/${sNum}?api_key=${API_KEY}`);
         const data = await res.json();
-        document.getElementById('e-row').innerHTML = data.episodes.map(e => `<div class="pill" tabindex="0" onclick="ignitePlayer(${e.episode_number}, this)">EP ${e.episode_number}</div>`).join('');
+        document.getElementById('e-row').innerHTML = (data.episodes || []).map(e => `<div class="pill" tabindex="0" onclick="ignitePlayer(${e.episode_number}, this)">EP ${e.episode_number}</div>`).join('');
     }
 
     function showPlayer() {
@@ -339,7 +369,7 @@
         const h = JSON.parse(localStorage.getItem('fear_history') || '[]');
         if(h.length === 0) return;
         document.getElementById('resume-ritual').style.display = 'block';
-        document.getElementById('continue-grid').innerHTML = h.map(i => `<div class="card" tabindex="0" style="min-width:120px; height:180px;" onclick='openDetails(${JSON.stringify(i)})'><img src="https://image.tmdb.org/t/p/w185${i.poster_path}"></div>`).join('');
+        document.getElementById('continue-grid').innerHTML = h.map(i => `<div class="card" tabindex="0" style="min-width:120px; height:180px;" onclick='openDetails(${JSON.stringify(i).replace(/'/g, "&apos;")})'><img src="https://image.tmdb.org/t/p/w185${i.poster_path}"></div>`).join('');
     }
 
     window.onload = () => {
