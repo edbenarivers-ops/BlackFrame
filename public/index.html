@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BlackFrame | Excellence</title>
+    <title>BlackFrame | The Culture Archive</title>
     <link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -19,7 +19,7 @@
         }
         #loader {
             position: fixed; inset: 0; background: var(--onyx); z-index: 10000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s;
         }
         header { 
             width: 100%; height: 60vh; 
@@ -32,12 +32,12 @@
             text-shadow: 4px 4px var(--crimson); 
         }
         .sticky-altar { 
-            position: sticky; top: 0; z-index: 1000; background: rgba(0, 77, 38, 0.9); 
+            position: sticky; top: 0; z-index: 1000; background: rgba(0, 77, 38, 0.95); 
             backdrop-filter: blur(15px); padding: 15px; border-bottom: 3px solid var(--gold); 
         }
         .search-input { 
             width: 100%; background: #000; border: 2px solid var(--gold); 
-            padding: 15px; color: var(--gold); font-weight: 700; border-radius: 5px;
+            padding: 15px; color: var(--gold); font-weight: 700; border-radius: 8px;
         }
         #side-menu {
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
@@ -51,13 +51,14 @@
         }
         .side-link:hover { color: var(--gold); border-left: 4px solid var(--crimson); padding-left: 10px; }
         .horror-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; }
-        .card { aspect-ratio: 2/3; background: #111; border-radius: 8px; cursor: pointer; border: 1px solid #333; overflow: hidden; }
+        .card { aspect-ratio: 2/3; background: #111; border-radius: 12px; cursor: pointer; border: 1px solid #333; overflow: hidden; transition: 0.3s; }
+        .card:hover { transform: scale(1.05); border-color: var(--gold); }
         .card img { width: 100%; height: 100%; object-fit: cover; }
         #ritual-screen { position: fixed; inset: 0; background: var(--onyx); z-index: 5000; display: none; overflow-y: auto; }
         .hero-bg { width: 100%; height: 45vh; background-size: cover; background-position: center; border-bottom: 4px solid var(--crimson); }
         .details-body { max-width: 900px; margin: -60px auto 0; padding: 30px; background: #0a0a0a; border-radius: 15px; border-top: 2px solid var(--gold); }
-        .play-btn { background: var(--gold); color: #000; border: none; width: 100%; padding: 18px; font-weight: 900; border-radius: 8px; cursor: pointer; }
-        .player-mount { width: 100%; aspect-ratio: 16/9; background: #000; border: 2px solid var(--emerald); display: none; margin-top: 20px; }
+        .play-btn { background: var(--gold); color: #000; border: none; width: 100%; padding: 18px; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 1.2rem; }
+        .player-mount { width: 100%; aspect-ratio: 16/9; background: #000; border: 2px solid var(--emerald); display: none; margin-top: 20px; border-radius: 10px; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
@@ -66,10 +67,12 @@
 <div id="loader"><h1 style="font-family:'Staatliches'; color:var(--gold);">FOR THE CULTURE</h1></div>
 
 <div id="side-menu">
-    <div class="side-link" onclick="setMode('movies')">BLACK CINEMA</div>
-    <div class="side-link" onclick="setMode('tv')">LEGENDARY SERIES</div>
-    <div class="side-link" onclick="setMode('plays')">STAGE & PLAYS</div>
-    <div class="side-link" onclick="setMode('comedy')">COMEDY CENTRAL</div>
+    <div class="side-link" onclick="setMode('modern')">MODERN ERA</div>
+    <div class="side-link" onclick="setMode('classic_tv')">SERIES & SITCOMS</div>
+    <div class="side-link" onclick="setMode('drama')">DRAMA & POWER</div>
+    <div class="side-link" onclick="setMode('comedy')">COMEDY & STANDUP</div>
+    <div class="side-link" onclick="setMode('stage')">STAGE & PLAYS</div>
+    <div class="side-link" onclick="setMode('horror')">THRILLERS</div>
 </div>
 
 <header><div class="logo">BlackFrame</div></header>
@@ -86,10 +89,10 @@
 <div id="ritual-screen">
     <div id="hero-bg" class="hero-bg"></div>
     <div class="details-body">
-        <button onclick="closeRitual()" style="background:none; border:none; color:var(--gold); font-size:2rem; cursor:pointer;">←</button>
-        <h1 id="det-title" style="font-family:'Staatliches'; font-size:2.5rem; margin:10px 0;"></h1>
+        <button onclick="closeRitual()" style="background:none; border:none; color:var(--gold); font-size:2.5rem; cursor:pointer;">←</button>
+        <h1 id="det-title" style="font-family:'Staatliches'; font-size:2.8rem; margin:10px 0;"></h1>
         <button class="play-btn" onclick="showPlayer()">WATCH NOW</button>
-        <p id="det-desc" style="color:#bbb; line-height:1.6;"></p>
+        <p id="det-desc" style="color:#bbb; line-height:1.8; font-size: 1.1rem;"></p>
         <div id="player-mount" class="player-mount"></div>
     </div>
 </div>
@@ -97,38 +100,57 @@
 <script>
     const API_KEY = 'b9c746781e1e9b084c4cc4f0420156d4';
     
-    // THE FIREWALL: ONLY these IDs can exist in the archive.
+    // THE ULTIMATE HARDCODED VAULT (Strict Inclusion)
     const VAULT = {
-        movies: [
-            11456, 12154, 840, 18725, 43867, 10034, 1361, 11545, 11468, 10471, 11419, 13596, 10603, 11827, 450465, 10535, 872, 11846, 11398, 9381, 1904, 11844, 11003, 9102, 11461, 4421, 13730, 2900, 11186, 10756, 12621, 12610, 11453, 9335, 10839, 11833, 110416, 1391, 11858, 8072, 11462, 11469, 18330, 11311, 4310, 11822, 11452, 11062, 11470, 9370, 11415, 10501, 10540, 12144, 9556, 10776, 12158, 607, 11818, 11373, 12700, 11418, 11451, 11416, 5174, 9954, 137, 12620, 10156, 14113, 11471, 9353, 11631, 11417, 8665, 11371, 10395, 10393, 10391, 10557, 11041, 12155, 11467, 10594, 9352, 9422, 11420, 11130, 11131, 1396
+        modern: [
+            11545, 11468, 10471, 505642, 634649, 585083, 419704, 338958, 438650, 483184, 11420, 11186, 12621, 12610, 10756, 11419, 13596, 11844
         ],
-        tv: [
-            1681, 4589, 2125, 3335, 61608, 65545, 1359, 2300, 4370, 2187, 2405, 3073, 2313, 1157, 4390, 12818, 18564, 4611, 6720, 2038, 2693, 2261, 111322, 12399, 1167, 3006, 1089, 4426, 61164, 5800, 11122, 11575, 14065, 14216, 14389, 2984, 4607, 72549, 2351, 4410, 1667, 2946, 10842, 600, 4000, 3000
+        classic_tv: [
+            // Roots, Martin, Cosby, Sister Sister, Fresh Prince, etc.
+            1359, 2300, 4370, 2187, 2405, 3073, 2313, 1157, 4390, 12818, 18564, 4611, 6720, 2038, 2693, 1681, 4589, 2125, 3335, 61608
         ],
-        plays: [41211, 35048, 5174, 43419, 43420, 31362, 26524, 26523, 22448, 11471, 10594, 12700, 48332],
-        comedy: [11003, 11461, 11451, 11416, 10756, 10594, 11467, 13730, 12144, 10393, 10391, 10395, 10557, 14113, 11417, 12620, 12700]
+        drama: [
+            // Moonlight, Fences, Snowfall, Power, Empire, Malcolm X, etc.
+            376867, 393209, 71694, 61733, 70785, 872, 11846, 11398, 9381, 110416, 1391, 10540, 11452, 11062, 11470
+        ],
+        comedy: [
+            // Friday, Coming to America, Barbershop, Original Kings of Comedy
+            10535, 11003, 11461, 9102, 11415, 12144, 10393, 10391, 10395, 11417, 12155, 12620, 11416
+        ],
+        stage: [
+            // Dreamgirls, The Wiz, Tyler Perry Plays, Cinderella
+            41211, 35048, 11471, 10594, 5174, 137, 43419, 43420, 31362, 26524, 26523
+        ],
+        horror: [
+            // Get Out, Us, Candyman, Tales from the Hood, Bones, Blade
+            419430, 458723, 565028, 11370, 18330, 11311, 607, 11858
+        ]
     };
 
-    let page = 1, mode = 'movies', fetching = false, selected = null;
+    let page = 1, mode = 'modern', fetching = false, selected = null;
 
     async function load(reset = false) {
         if(reset) { page = 1; document.getElementById('main-grid').innerHTML = ''; }
         fetching = true;
         const list = VAULT[mode] || [];
         const slice = list.slice((page-1)*20, page*20);
-        if(slice.length === 0) return;
+        if(slice.length === 0) { fetching = false; return; }
 
-        const type = (mode === 'tv') ? 'tv' : 'movie';
+        // Ultimate Hack: Use ID Lookup to bypass algorithm leakage
+        const type = (mode === 'classic_tv') ? 'tv' : 'movie';
+        
         for(let id of slice) {
-            const res = await fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}`);
-            const item = await res.json();
-            if(item.poster_path) {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `<img src="https://image.tmdb.org/t/p/w342${item.poster_path}">`;
-                card.onclick = () => openDetails(item);
-                document.getElementById('main-grid').appendChild(card);
-            }
+            try {
+                const res = await fetch(`https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}`);
+                const item = await res.json();
+                if(item.poster_path) {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `<img src="https://image.tmdb.org/t/p/w342${item.poster_path}">`;
+                    card.onclick = () => openDetails(item);
+                    document.getElementById('main-grid').appendChild(card);
+                }
+            } catch(e) {}
         }
         fetching = false;
     }
@@ -154,15 +176,14 @@
     
     function handleSearch(e) {
         if(e.key === 'Enter') {
-            document.getElementById('main-grid').innerHTML = '<p style="padding:20px;">Hacker Search Enabled: Filtering Archive...</p>';
-            // Search is now restricted to our Hardcoded Vault for safety
-            load(true); 
+            // Disabled search-to-discover to prevent leakage of non-Black content.
+            // Search will simply reset to the curated vault.
+            setMode('modern'); 
         }
     }
 
     window.onload = () => { load(); setTimeout(() => document.getElementById('loader').style.display='none', 1000); };
     
-    // Side Menu Trigger
     let touchStart = 0;
     document.addEventListener('touchstart', e => touchStart = e.touches[0].clientX);
     document.addEventListener('touchend', e => { 
